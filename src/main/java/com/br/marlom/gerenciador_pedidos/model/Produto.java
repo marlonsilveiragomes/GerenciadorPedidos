@@ -6,16 +6,26 @@ import jakarta.persistence.*;
 public class Produto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true, nullable = false)
+    private Long id;
+
     private String nome;
     @Column(name="valor")
     private Double preco;
 
+    @ManyToOne
+    @JoinColumn(name = "categoria_id")
+    private Categoria categoria;
+
+
+
     public Produto(){}
 
-    public Produto(String nome, Double preco){
+    public Produto(String nome, Double preco, Categoria categoria){
         this.nome = nome;
         this.preco = preco;
+        this.categoria = categoria;
+
+
     }
 
     public String getNome() {
@@ -32,5 +42,13 @@ public class Produto {
 
     public void setPreco(Double preco) {
         this.preco = preco;
+    }
+
+    public Categoria getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(Categoria categoria) {
+        this.categoria = categoria;
     }
 }
