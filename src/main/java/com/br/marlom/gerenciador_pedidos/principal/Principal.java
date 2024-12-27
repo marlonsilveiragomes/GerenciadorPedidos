@@ -6,6 +6,7 @@ import com.br.marlom.gerenciador_pedidos.model.Produto;
 import com.br.marlom.gerenciador_pedidos.repository.CategoriaRepository;
 import com.br.marlom.gerenciador_pedidos.repository.PedidoRepository;
 import com.br.marlom.gerenciador_pedidos.repository.ProdutoRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -22,14 +23,15 @@ public class Principal {
     @Autowired
     private PedidoRepository pedidoRepository;
 
+    @Transactional
     public void salvarDados()
 
     {
         Categoria categoriaEletronicos = new Categoria(null, "Eletrônicos");
         Categoria categoriaLivros = new Categoria(null, "Livros");
 
-        Produto produto = new Produto("Notebook Dell", 2990.00, categoriaEletronicos);
-        Produto produto1 = new Produto("Livro Javas", 100.00, categoriaLivros);
+        Produto produto = new Produto("Notebook Samsung", 29990.00, categoriaEletronicos);
+        Produto produto1 = new Produto("Livro SpringBoot", 100.00, categoriaLivros);
 
         categoriaLivros.setProdutos(List.of(produto1));
         categoriaEletronicos.setProdutos(List.of(produto));
