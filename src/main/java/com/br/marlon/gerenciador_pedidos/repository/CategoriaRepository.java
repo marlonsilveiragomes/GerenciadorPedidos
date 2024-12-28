@@ -10,4 +10,5 @@ public interface CategoriaRepository extends JpaRepository<Categoria, Long> {
     List<Categoria> findAllByNome(String nome);
 
 
+
 }

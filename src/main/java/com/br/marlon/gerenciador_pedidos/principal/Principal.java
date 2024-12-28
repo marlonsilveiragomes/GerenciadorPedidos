@@ -9,6 +9,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -27,8 +28,11 @@ public class Principal {
     public void executarMenu() {
         var opcao = -1;
         while (opcao != 0) {
+            System.out.println();
             var menu = """
+                    
                     1-Cadastrar Produtos
+                                                           
                     2-Listar Produtos Cadastrados no Banco de Dados
                     
                     0 - Sair
@@ -38,11 +42,12 @@ public class Principal {
             leitura.nextLine();
 
             switch (opcao) {
-               case 1:
+                case 1:
                     salvarDados();
                     break;
                 case 2:
                     listarProdutos();
+                    break;
                 case 0:
                     System.out.println("Ejetanto...");
                     break;
@@ -54,27 +59,60 @@ public class Principal {
 
 
     @Transactional
-    public void salvarDados()
+    public void salvarDados() {
+        Scanner scanner = new Scanner(System.in);
 
-    {
-        Categoria categoriaEletronicos = new Categoria(null, "Eletrônicos");
-        Categoria categoriaLivros = new Categoria(null, "Livros");
+        // Solicitar nome do produto, preço e categoria ao usuário
+        System.out.println("Digite o nome do produto:");
+        String nomeProduto = scanner.nextLine();
 
-        Produto produto = new Produto("Notebook Dell II", 2500.00, categoriaEletronicos);
-        Produto produto1 = new Produto("Livro JAVAI", 99.00, categoriaLivros);
+        double precoProduto = 0.00;
+        boolean precoValido = false;
 
-        categoriaLivros.setProdutos(List.of(produto1));
-        categoriaEletronicos.setProdutos(List.of(produto));
+        // Validar entrada de preço
+        while (!precoValido) {
+            System.out.println("Digite o preço do produto:");
+            try {
+                precoProduto = scanner.nextDouble();
+                precoValido = true;  // Se a entrada for válida, sai do loop
+            } catch (InputMismatchException e) {
+                System.out.println("Preço inválido. Por favor, insira um número válido.");
+                scanner.nextLine();  // Limpar o buffer do scanner
+            }
+        }
 
-        categoriaRepository.saveAll(List.of(categoriaEletronicos, categoriaLivros));
+        scanner.nextLine(); // Consumir a linha vazia após o nextDouble()
 
-        System.out.println("Categorias e seus produtos:");
-        categoriaRepository.findAll().forEach(categoria -> {
-            System.out.println("Categoria: " + categoria.getNome());
-            categoria.getProdutos().forEach(p ->
-                    System.out.println(" - Produto: " + produto.getNome())
-            );
-        });
+        System.out.println("Digite a categoria do produto (Ex: Eletrônicos, Livros):");
+        String categoriaProduto = scanner.nextLine();
+
+
+        List<Categoria> categorias = categoriaRepository.findAllByNome(categoriaProduto);
+        Categoria categoria;
+        if (categorias.isEmpty()) {
+            // Se a categoria não existe, criar uma nova categoria
+            categoria = new Categoria(null, categoriaProduto);
+            categoriaRepository.save(categoria); // Salvar nova categoria no banco
+        } else {
+            categoria = categorias.get(0); // Se encontrar mais de uma, pegar a primeira
+        }
+
+        // Criar o produto com os dados fornecidos
+        Produto produto = new Produto(nomeProduto, precoProduto, categoria);
+
+        categoria.getProdutos().add(produto);
+
+        // Salvar a categoria e o produto no banco de dados
+        categoriaRepository.save(categoria);
+
+        // Exibir confirmação e lista de categorias e seus produtos
+        System.out.println("Produto cadastrado com sucesso!");
+
+
+        // Voltar ao menu após a operação
+        executarMenu();
+
+
     }
 
     private void listarProdutos() {
@@ -87,5 +125,15 @@ public class Principal {
                 System.out.println("Nome: " + produto.getNome() + ", Preço: " + produto.getPreco() + ", Categoria: " + produto.getCategoria().getNome());
             }
         }
+        executarMenu();
+    }
+
+    private void listarCategoriasProdutos() {
+        // Exibir as categorias e seus produtos salvos
+        System.out.println("Categorias e seus produtos:");
+        categoriaRepository.findAll().forEach(c -> {
+            System.out.println("Categoria: " + c.getNome());
+            c.getProdutos().forEach(p -> System.out.println(" - Produto: " + p.getNome() + " - Preço: " + p.getPreco()));
+        });
     }
 }
