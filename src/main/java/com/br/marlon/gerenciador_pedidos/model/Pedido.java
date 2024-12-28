@@ -1,4 +1,4 @@
-package com.br.marlom.gerenciador_pedidos.model;
+package com.br.marlon.gerenciador_pedidos.model;
 
 import jakarta.persistence.*;
 

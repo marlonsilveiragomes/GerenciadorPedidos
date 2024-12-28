@@ -1,16 +1,14 @@
-package com.br.marlom.gerenciador_pedidos.principal;
+package com.br.marlon.gerenciador_pedidos.principal;
 
-import com.br.marlom.gerenciador_pedidos.model.Categoria;
-import com.br.marlom.gerenciador_pedidos.model.Pedido;
-import com.br.marlom.gerenciador_pedidos.model.Produto;
-import com.br.marlom.gerenciador_pedidos.repository.CategoriaRepository;
-import com.br.marlom.gerenciador_pedidos.repository.PedidoRepository;
-import com.br.marlom.gerenciador_pedidos.repository.ProdutoRepository;
+import com.br.marlon.gerenciador_pedidos.model.Categoria;
+import com.br.marlon.gerenciador_pedidos.model.Produto;
+import com.br.marlon.gerenciador_pedidos.repository.CategoriaRepository;
+import com.br.marlon.gerenciador_pedidos.repository.PedidoRepository;
+import com.br.marlon.gerenciador_pedidos.repository.ProdutoRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Component

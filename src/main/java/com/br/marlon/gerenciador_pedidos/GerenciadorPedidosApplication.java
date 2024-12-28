@@ -1,6 +1,6 @@
-package com.br.marlom.gerenciador_pedidos;
+package com.br.marlon.gerenciador_pedidos;
 
-import com.br.marlom.gerenciador_pedidos.principal.Principal;
+import com.br.marlon.gerenciador_pedidos.principal.Principal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
