@@ -18,6 +18,6 @@ public class GerenciadorPedidosApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		principal.salvarDados();
+		principal.executarMenu();
 	}
 }

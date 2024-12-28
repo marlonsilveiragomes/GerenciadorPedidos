@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Scanner;
 
 @Component
 public class Principal {
@@ -21,6 +22,37 @@ public class Principal {
     @Autowired
     private PedidoRepository pedidoRepository;
 
+    private Scanner leitura = new Scanner(System.in);
+
+    public void executarMenu() {
+        var opcao = -1;
+        while (opcao != 0) {
+            var menu = """
+                    1-Cadastrar Produtos
+                    2-Listar Produtos Cadastrados no Banco de Dados
+                    
+                    0 - Sair
+                    """;
+            System.out.println(menu);
+            opcao = leitura.nextInt();
+            leitura.nextLine();
+
+            switch (opcao) {
+               case 1:
+                    salvarDados();
+                    break;
+                case 2:
+                    listarProdutos();
+                case 0:
+                    System.out.println("Ejetanto...");
+                    break;
+                default:
+                    System.out.println("Opção Inválida, tente novamente.");
+            }
+        }
+    }
+
+
     @Transactional
     public void salvarDados()
 
@@ -28,8 +60,8 @@ public class Principal {
         Categoria categoriaEletronicos = new Categoria(null, "Eletrônicos");
         Categoria categoriaLivros = new Categoria(null, "Livros");
 
-        Produto produto = new Produto("Notebook Samsung", 29990.00, categoriaEletronicos);
-        Produto produto1 = new Produto("Livro SpringBoot", 100.00, categoriaLivros);
+        Produto produto = new Produto("Notebook Dell II", 2500.00, categoriaEletronicos);
+        Produto produto1 = new Produto("Livro JAVAI", 99.00, categoriaLivros);
 
         categoriaLivros.setProdutos(List.of(produto1));
         categoriaEletronicos.setProdutos(List.of(produto));
@@ -43,5 +75,17 @@ public class Principal {
                     System.out.println(" - Produto: " + produto.getNome())
             );
         });
+    }
+
+    private void listarProdutos() {
+        List<Produto> produtos = produtoRepository.findAll();
+        if (produtos.isEmpty()) {
+            System.out.println("Não há produtos cadastrados.");
+        } else {
+            System.out.println("Lista de Produtos:");
+            for (Produto produto : produtos) {
+                System.out.println("Nome: " + produto.getNome() + ", Preço: " + produto.getPreco() + ", Categoria: " + produto.getCategoria().getNome());
+            }
+        }
     }
 }
