@@ -2,6 +2,7 @@ package com.br.marlon.gerenciador_pedidos.model;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -15,11 +16,13 @@ public class Categoria {
     @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Produto> produtos;
 
-    public Categoria(){}
+    public Categoria() {
+    }
 
     public Categoria(Long id, String nome) {
         this.id = id;
         this.nome = nome;
+        this.produtos = new ArrayList<>();
     }
 
     public Long getId() {
@@ -44,5 +47,9 @@ public class Categoria {
 
     public void setProdutos(List<Produto> produtos) {
         this.produtos = produtos;
+    }
+
+    public void adicionarProduto(Produto produto) {
+        this.produtos.add(produto);
     }
 }
