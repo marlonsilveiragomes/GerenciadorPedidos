@@ -66,7 +66,10 @@ public class Principal {
         System.out.println("Digite o nome do produto:");
         String nomeProduto = scanner.nextLine();
 
+
         double precoProduto = 0.0;
+
+
         boolean precoValido = false;
 
         // Validar entrada de preço
